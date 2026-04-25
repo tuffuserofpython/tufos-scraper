@@ -1,224 +1,227 @@
-```md
+
 # 🎥 Tufos Video Scraper & Downloader
 
-Este projeto é um **scraper automatizado de vídeos da plataforma Tufos**, desenvolvido em Python, que permite extrair, localizar e baixar vídeos hospedados em uma CDN a partir de arquivos HTML locais.
+Este projeto é um scraper automatizado desenvolvido em Python com o objetivo de estudar como plataformas de streaming organizam e distribuem seus vídeos através de CDN (Content Delivery Network).
 
-Ele foi criado com foco em estudo de:
+O sistema foi construído para:
 
-- Web scraping
+- Extrair informações de episódios a partir de HTML local
+- Identificar padrões de URLs de vídeos
+- Reconstruir links de mídia hospedados em CDN
+- Automatizar downloads em massa
+- Organizar arquivos de forma estruturada
+
+---
+
+# 🧠 Objetivo do projeto
+
+Este projeto não é apenas um downloader.
+
+Ele foi desenvolvido como um estudo prático de:
+
 - Engenharia reversa de URLs
-- Automação com Python
-- Multithreading
-- Processamento de HTML
+- Estruturação de mídia em plataformas web
+- Automação de scraping com Python
+- Multithreading para otimização de performance
+- Manipulação de HTML com BeautifulSoup
+
+O foco principal é entender como sistemas reais entregam conteúdo de vídeo.
 
 ---
 
 # ⚠️ Aviso importante
 
-Este projeto é **apenas para fins educacionais e de pesquisa técnica**.
+Este projeto é exclusivamente educacional.
 
-Ele demonstra como estruturas de sites podem ser analisadas e automatizadas, sem qualquer intenção de uso comercial ou violação de termos de serviço.
-
----
-
-# 🧠 Como o sistema funciona
-
-O scraper analisa páginas HTML salvas localmente e extrai informações dos episódios, como:
-
-- Nome da atração (série)
-- Nome do episódio
-- Hash da atração
-- ID interno do episódio
-- Slugs de URL
-
-Com esses dados, ele tenta reconstruir URLs de vídeos hospedados em uma CDN.
+Ele demonstra técnicas de análise de estrutura web e automação, sem incentivo ao uso indevido ou violação de termos de serviços externos.
 
 ---
 
-# 🔗 Estrutura da URL analisada
+# 🌐 Como os vídeos são estruturados
 
-Os vídeos seguem um padrão semelhante a:
+Os vídeos seguem um padrão baseado em CDN:
 
-```
-
-[https://tufos-assinantes.b-cdn.net/arquivos/atracao/](https://tufos-assinantes.b-cdn.net/arquivos/atracao/)
-[HASH_DA_ATRACAO]/
+https://tufos-assinantes.b-cdn.net/arquivos/atracao/
+[HASH_ATRACAO]/
 [ID_EPISODIO]/
 videos/
 [SLUG_ATRACAO]-[NUMERO]-[SLUG_EPISODIO]-desktop-tufoscombr.mp4
 
-```
-
 ---
 
-# 🔍 Exemplo real de vídeo
+# 🔍 Exemplo real analisado
 
-```
-
-[https://tufos-assinantes.b-cdn.net/arquivos/atracao/](https://tufos-assinantes.b-cdn.net/arquivos/atracao/)
+https://tufos-assinantes.b-cdn.net/arquivos/atracao/
 0f28b5d49b3020afeecd95b4009adf4c/
 EP02-1773237967/
 videos/
 os-caipiras-filminho-014-carrapato-no-bumbum-desktop-tufoscombr.mp4
 
-```
-
 ---
 
-# 🧩 Como os dados são obtidos
+# 🧩 Como cada parte é obtida
 
-## 📌 Hash da atração
-Encontrado na tag `<img>`:
-
-```
+## 📦 Hash da atração
+Encontrado dentro da tag de imagem no HTML:
 
 .../atracao/0f28b5d49b3020afeecd95b4009adf4c/EP02-1773237967/...
 
-```
-
 ---
 
-## 📌 ID do episódio
-
-Também presente na URL da imagem:
-
-```
+## 🆔 ID do episódio
 
 EP02-1773237967
 
-```
+Também presente na URL da imagem.
 
 ---
 
-## 📌 Slug da atração
+## 🎬 Slug da atração
 
-Encontrado no link da série:
+Exemplo:
 
-```
+os-caipiras-filminho
 
-/atracoes/os-caipiras-filminho/141/
-
-```
+Encontrado no link da série dentro do HTML.
 
 ---
 
-## 📌 Slug do episódio
+## 📺 Slug do episódio
 
-Encontrado no link do episódio:
+Exemplo:
 
-```
+carrapato-no-bumbum
 
-/episodio/carrapato-no-bumbum/2412/
-
-```
+Encontrado na URL do episódio.
 
 ---
 
-## 📌 Número do vídeo
+## 🔢 Número do vídeo
 
-Este valor não aparece diretamente no HTML.
+Este valor NÃO aparece no HTML.
 
-Ele é descoberto por tentativa (ex: 1, 01, 001).
+Ele é descoberto através de tentativa controlada:
 
----
+- 1
+- 01
+- 001
 
-# ⚙️ Funcionalidades
-
-- 🔎 Leitura de HTML local
-- 🧠 Construção dinâmica de URLs
-- ⚡ Multithreading (busca e download)
-- ⬇️ Download automático de vídeos
-- 📁 Organização por série e episódio
-- 📊 Logs de status (ENCONTRADO / FALHA)
+O sistema testa variações até encontrar a URL válida.
 
 ---
 
-# 📁 Estrutura final dos arquivos
+# ⚡ Funcionalidades do projeto
 
-```
+## 🔎 Scraper HTML
+- Lê arquivos locais (pagina1.html até paginaN.html)
+- Extrai episódios automaticamente
+- Filtra dados relevantes do DOM
+
+## 🧠 Reconstrução de URLs
+- Identifica padrões da CDN
+- Monta URLs dinamicamente
+- Testa múltiplos formatos de numeração
+
+## ⚡ Multithreading
+- Acelera buscas e downloads
+- Permite execução paralela
+- Usuário define quantidade de threads
+
+## ⬇️ Downloader automático
+- Baixa vídeos diretamente da CDN
+- Usa streaming para evitar sobrecarga de memória
+- Renomeia arquivos automaticamente
+
+## 📁 Organização inteligente
+- Cria pastas por série
+- Organiza episódios automaticamente
+- Remove caracteres inválidos de nomes
+
+---
+
+# 📁 Estrutura final gerada
 
 videos/
-Os Caipiras Filminho/
-Carrapato No Bumbum.mp4
-Cachaca De Alambique.mp4
-Tirando Leite Da Mimosa.mp4
-
-```
+  Os Caipiras Filminho/
+    Cachaca De Alambique.mp4
+    Tirando Leite Da Mimosa.mp4
+    Carrapato No Bumbum.mp4
 
 ---
 
-# 🌐 O Tufos é seguro?
+# 📊 Tecnologias utilizadas
 
-Com base na análise técnica das URLs e da arquitetura observada, alguns pontos podem ser considerados:
-
-### 📌 1. Uso de CDN pública
-Os vídeos são entregues via CDN (`b-cdn.net`), o que indica:
-
-- Distribuição de conteúdo em servidores externos
-- Possível uso de links diretos acessíveis via URL
-
----
-
-### 📌 2. URLs previsíveis
-As URLs seguem um padrão estruturado e parcialmente previsível, o que sugere:
-
-- Ausência de proteção forte contra enumeração de arquivos
-- Possível dependência de ofuscação por IDs e hashes
-
----
-
-### 📌 3. Exposição de metadados no HTML
-O HTML contém informações como:
-
-- Slugs
-- IDs internos
-- Estrutura de episódios
-
-Isso facilita automação e scraping.
-
----
-
-### 📌 4. Controle de acesso não visível neste contexto
-Não é possível afirmar autenticação interna apenas pela análise da CDN.
-
----
-
-## ⚠️ Conclusão sobre segurança
-
-Com base apenas na engenharia reversa observada:
-
-- O sistema parece ter **proteção moderada baseada em URL e hashes**
-- A estrutura permite automação se padrões forem descobertos
-- Não há evidência suficiente para classificar como “inseguro” ou “seguro” de forma absoluta
-
-👉 Portanto, a segurança depende mais da camada de autenticação do site principal do que da CDN em si.
-
----
-
-# 🧠 Tecnologias usadas
-
-- Python
+- Python 3
 - Requests
 - BeautifulSoup
 - ThreadPoolExecutor
+- Regex
 - TQDM
 
 ---
 
-# 🚀 Objetivo do projeto
+# 🚀 Fluxo do sistema
 
-Este projeto foi criado para demonstrar:
+1. Lê arquivos HTML locais
+2. Extrai episódios
+3. Monta possíveis URLs
+4. Testa existência na CDN
+5. Confirma vídeo válido
+6. Baixa arquivo
+7. Organiza em pastas
 
-- Como sites estruturam entrega de mídia
-- Como URLs podem ser analisadas e reconstruídas
-- Como automação pode acelerar downloads em lote
-- Como scraping pode ser otimizado com multithreading
+---
+
+# 🧠 Conceitos aplicados
+
+- Web scraping estruturado
+- Engenharia reversa de URL
+- Pattern matching em HTML
+- Concurrency (threads)
+- File system automation
+- CDN behavior analysis
+
+---
+
+# 📌 Observações técnicas
+
+- O sistema depende de padrões consistentes da CDN
+- Pequenas mudanças no site podem quebrar a lógica
+- O número do vídeo é inferido, não explicitamente fornecido
+- Hashes e IDs são essenciais para reconstrução da URL
+
+---
+
+# ⚠️ Segurança e análise do site
+
+A estrutura observada indica:
+
+- Uso de CDN pública para distribuição de vídeos
+- URLs parcialmente previsíveis
+- Metadados expostos no HTML
+- Dependência de hashes para ocultação de acesso direto
+
+Isso sugere um sistema com:
+
+- Segurança baseada em ofuscação de URL
+- Controle moderado de acesso
+- Dependência do backend para validação real
+
+---
+
+# 🧪 Finalidade do projeto
+
+Este projeto serve como:
+
+- Estudo de scraping avançado
+- Análise de sistemas de streaming
+- Demonstração de automação com Python
+- Experimento de engenharia reversa de mídia
 
 ---
 
 # ⚠️ Disclaimer
 
-Este projeto é apenas para fins educacionais e de estudo técnico.
+Este projeto é apenas para fins educacionais e de pesquisa técnica.
 
-O uso indevido pode violar termos de serviços de terceiros.
-```
+Qualquer uso indevido é de total responsabilidade do usuário.
